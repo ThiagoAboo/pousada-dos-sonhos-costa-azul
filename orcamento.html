@@ -19,7 +19,7 @@
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 1000px;
             margin: 0 auto;
             background: white;
             border-radius: 28px;
@@ -45,7 +45,7 @@
             color: #1e3a2f;
         }
 
-        /* Grid responsivo: duas colunas em mobile, quebra automática */
+        /* GRID RESPONSIVO: 2 colunas em celular, 3 ou mais em tablet */
         .form-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
@@ -53,20 +53,15 @@
             margin-bottom: 20px;
         }
 
-        /* Para telas muito pequenas, força uma coluna (mas ainda respeita min-width) */
-        @media (max-width: 480px) {
+        /* Para telas entre 400px e 600px, força 2 colunas fixas (evita 1 coluna precoce) */
+        @media (max-width: 600px) {
             .form-grid {
-                grid-template-columns: 1fr 1fr; /* duas colunas fixas */
-            }
-            /* Se algum campo precisar de largura total, pode usar :first-child ou ajuste manual */
-            .field-group:first-child,
-            .field-group:nth-child(2) {
-                /* ambos já ocupam 1fr cada */
+                grid-template-columns: repeat(2, 1fr);
             }
         }
 
-        /* Para telas abaixo de 380px, vira uma coluna */
-        @media (max-width: 380px) {
+        /* Para telas muito pequenas (menos de 400px), vira 1 coluna */
+        @media (max-width: 400px) {
             .form-grid {
                 grid-template-columns: 1fr;
             }
@@ -92,6 +87,7 @@
             font-family: inherit;
             background: white;
             transition: 0.2s;
+            width: 100%;
         }
 
         input:focus, textarea:focus, select:focus {
@@ -130,11 +126,6 @@
             color: #0b5e42;
         }
 
-        .suite-checkbox {
-            transform: scale(1.1);
-            margin-right: 4px;
-        }
-
         .suite-desc {
             margin: 12px 0;
         }
@@ -160,9 +151,8 @@
         }
 
         .price-input {
-            width: 140px;
             flex: 1;
-            min-width: 100px;
+            min-width: 120px;
         }
 
         /* Opções bar */
@@ -188,10 +178,6 @@
             display: inline-flex;
             align-items: center;
             gap: 6px;
-        }
-
-        .discount-field input {
-            width: 70px;
         }
 
         .warning {
@@ -231,7 +217,6 @@
             cursor: pointer;
             font-size: 1rem;
             transition: 0.2s;
-            margin-top: 10px;
             display: inline-flex;
             align-items: center;
             gap: 8px;
@@ -247,6 +232,7 @@
             justify-content: flex-end;
             gap: 12px;
             flex-wrap: wrap;
+            margin-top: 8px;
         }
 
         footer {
@@ -256,12 +242,7 @@
             margin-top: 24px;
         }
 
-        hr {
-            margin: 18px 0;
-            border-color: #c8e6d9;
-        }
-
-        /* Ajustes específicos mobile para cards */
+        /* Ajustes específicos mobile */
         @media (max-width: 600px) {
             .suite-price {
                 flex-direction: column;
@@ -271,8 +252,11 @@
                 width: 100%;
             }
             .suite-header {
-                flex-direction: row;
                 justify-content: space-between;
+            }
+            button {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
@@ -282,7 +266,7 @@
     <h1>🏨 Pousada dos Sonhos<br><span style="font-size:0.9rem;">🌊 Costa Azul</span></h1>
     <p style="font-size:0.85rem;">Dados salvos automaticamente. Edite descrições e preços.</p>
 
-    <!-- Dados principais: grid responsivo lado a lado -->
+    <!-- Grid responsivo: lado a lado no celular (2 colunas) -->
     <div class="form-grid">
         <div class="field-group"><label>📅 Check-in</label><input type="date" id="checkin" value="2026-06-09"></div>
         <div class="field-group"><label>📅 Check-out</label><input type="date" id="checkout" value="2026-06-10"></div>
@@ -298,7 +282,7 @@
     <!-- Opções globais -->
     <div class="options-bar">
         <div class="option-item"><input type="checkbox" id="aplicar-desconto"> <strong>Aplicar desconto</strong>
-            <div id="desconto-wrapper" style="display:inline-flex; margin-left: 4px;">
+            <div id="desconto-wrapper" style="display:inline-flex;">
                 <input type="number" id="desconto-percent" value="12" step="1" min="0" max="100" style="width:70px;"> %
             </div>
         </div>
@@ -315,7 +299,7 @@
         <label style="font-weight: bold;">📝 Mensagem gerada (copie e cole no WhatsApp)</label>
         <textarea id="mensagem-texto" readonly></textarea>
     </div>
-    <footer>Os dados são salvos automaticamente no seu navegador. Deslize para ver todas as opções.</footer>
+    <footer>Dados salvos automaticamente no navegador. Layout otimizado para celular.</footer>
 </div>
 
 <script>
@@ -344,7 +328,6 @@
     const LISTING_ID = "1503584633402633674";
     const AIRBNB_BASE = "https://www.airbnb.com.br/rooms/";
 
-    // Elementos DOM
     const checkinEl = document.getElementById('checkin');
     const checkoutEl = document.getElementById('checkout');
     const adultosEl = document.getElementById('adultos');
@@ -626,7 +609,6 @@ ${isWeekend ? '⚠️ *Nossa política de reserva é de no mínimo 2 noites para
         globalFields.forEach(field => {
             field.addEventListener('input', () => saveAndUpdate());
         });
-        aplicarDescontoCheck.addEventListener('change', () => saveAndUpdate());
         copiarBtn.addEventListener('click', () => {
             mensagemTextarea.select();
             document.execCommand('copy');
