@@ -356,7 +356,7 @@
         const aplicarDesconto = aplicarDescontoCheck.checked;
         let descontoPercent = aplicarDesconto ? parseFloat(descontoPercentEl.value)||0 : 0;
         const incluirLink = incluirLinkCheck.checked;
-        const formatDate = d => new Date(d).toLocaleDateString('pt-BR');
+        const formatDate = d => new Date(d+"T00:00:00").toLocaleDateString('pt-BR');
         let msg = `🏨 *POUSADA DOS SONHOS*\n🌊*COSTA AZUL*\n\n📅 *PERÍODO:*\n• Check-in: ${formatDate(checkin)} (14h)\n• Check-out: ${formatDate(checkout)} (11h)\n• Total de noites: ${noites} noites\n${isWeekend && noites<2 ? '⚠️ *Política: mínimo 2 noites para fins de semana*\n' : ''}\n👥 *HÓSPEDES:*${adultos>0?`\n• Adultos: ${adultos}`:''}${criancas>0?`\n• Crianças: ${criancas}`:''}${bebes>0?`\n• Bebês: ${bebes}`:''}${pets>0?`\n• Pets: ${pets}`:''}\n------------------------\n`;
         let hasRoom = false;
         for (const suite of suitesData) {
